@@ -1,0 +1,39 @@
+scope: X-[subj]->Y
+conclusion: X << Y
+
+templates:
+    base:
+        own:
+            method: exclude
+            pattern: "lemma"
+        parent:
+            method: include
+            pattern: ".*"
+        child:
+            method: include
+            pattern: ".*"
+        prev:
+            method: include
+            pattern: ".*"
+        next:
+            method: include
+            pattern: ".*"
+
+features:
+    X: base
+    Y: 
+        own:
+            method: include
+            pattern: ".*"
+        parent:
+            method: include
+            pattern: ".*"
+        child:
+            method: include
+            pattern: ".*"
+        prev:
+            method: include
+            pattern: ".*"
+        next:
+            method: include
+            pattern: ".*"
