@@ -1,4 +1,5 @@
 import grewpy
+import re
 
 CLOSED_POS_TAGS = {
     "AUX",
@@ -131,13 +132,40 @@ def extract_features(draft, match, feature_predicate, include_metadata=False):
     return features
 
 
-def extract_data(treebank_path, scope, conclusion, feature_predicate):
+def extract_data(treebank_path, scope, conclusion, conclusion_meta, feature_predicate):
+    if conclusion is None and conclusion_meta is None:
+        raise RuntimeError("No conclusion provided in configuration")
+
     corpus = grewpy.Corpus(treebank_path)
     draft = grewpy.CorpusDraft(treebank_path)
 
     req = grewpy.Request(scope)
-    matches = corpus.search(req, clustering_parameter=["{" + conclusion + "}"])
-    matches = [(sent, c) for c, sents in matches.items() for sent in sents]
+    if conclusion is not None:
+        matches = corpus.search(req, clustering_parameter=["{" + conclusion + "}"])
+        matches = [(sent, c) for c, sents in matches.items() for sent in sents]
+    else:
+        matches = [(sent, "Yes") for sent in corpus.search(req)]
+
+    if conclusion_meta is not None:
+        conclusion_meta = {
+            k: v if type(v) is list else [v]
+            for k, v in conclusion_meta.items()
+        }
+
+        matches = [
+            (sent, "No")
+            if c == "No"
+            else (
+                (sent, "Yes")
+                if all(
+                    any(re.fullmatch(p, sent[k]) for p in v)
+                    for k, v in conclusion_meta.items()
+                )
+                else (sent, "No")
+            )
+            for sent, c in matches
+            if all(k in sent for k in conclusion_meta.keys())
+        ]
 
     data = []
     for match, c in matches:

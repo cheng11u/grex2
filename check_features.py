@@ -13,12 +13,13 @@ with open(args.patterns) as instream:
     config = yaml.load(instream, Loader=yaml.Loader)
 
 scope = config["scope"]
-conclusion = config["conclusion"]
+conclusion = config.get("conclusion", None)
+conclusion_meta = config.get("conclusion_meta", None)
 
 templates = FeaturePredicate.from_config(config["templates"])
 feature_predicate = FeaturePredicate.from_config(config["features"], templates=templates)
 
-data = extract_data(args.data, scope, conclusion, feature_predicate)
+data = extract_data(args.data, scope, conclusion, conclusion_meta, feature_predicate)
 
 available_features = set()
 for sentence in data:

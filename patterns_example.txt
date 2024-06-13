@@ -1,5 +1,7 @@
 scope: X-[subj]->Y
 conclusion: X << Y
+conclusion_meta:
+    sent_id: "n01.*"
 
 templates:
     base:

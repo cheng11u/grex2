@@ -29,12 +29,13 @@ if __name__ == "__main__":
 
     scope = config["scope"]
     conclusion = config["conclusion"]
+    conclusion_meta = config.get("conclusion_meta", None)
 
     templates = FeaturePredicate.from_config(config["templates"])
     feature_predicate = FeaturePredicate.from_config(config["features"], templates=templates)
 
     print("Loading dataset...", flush=True)
-    data = extract_data(args.data, scope, conclusion, feature_predicate)
+    data = extract_data(args.data, scope, conclusion, conclusion_meta, feature_predicate)
 
     # quick checks
     if len(data) == 0:
