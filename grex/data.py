@@ -68,6 +68,17 @@ def extract_features(draft, match, feature_predicate, include_metadata=False):
         if feature_predicate(node_name, "parent", "rel_deep") and "deep" in rel:
             features["node:" + node_name + ":parent:rel_deep"] = rel["deep"]
 
+        # position of parent
+        if feature_predicate(node_name, "parent", "position"):
+            features["node:" + node_name + ":parent:position"] = "before" if int(parent_id) < int(node_id) else "after"
+
+        # head feature
+        if parent_id not in selected_node_ids:
+            parent_features = sentence.features[parent_id]
+            for k, v in parent_features.items():
+                if feature_predicate(node_name, "parent", k):
+                    features["node:" + node_name + ":parent:" + k] = v
+
         # prev word
         prev_id = str(int(node_id) - 1)
         if prev_id in sentence.features and prev_id not in selected_node_ids:
