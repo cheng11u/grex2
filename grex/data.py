@@ -158,13 +158,13 @@ def extract_data(treebank_path, scope, conclusion, conclusion_meta, feature_pred
             else (
                 (sent, "Yes")
                 if all(
-                    any(re.fullmatch(p, sent[k]) for p in v)
+                    any(re.fullmatch(p, draft[sent['sent_id']].meta[k]) for p in v)
                     for k, v in conclusion_meta.items()
                 )
                 else (sent, "No")
             )
             for sent, c in matches
-            if all(k in sent for k in conclusion_meta.keys())
+            if all(k in draft[sent['sent_id']].meta for k in conclusion_meta.keys())
         ]
 
     data = []

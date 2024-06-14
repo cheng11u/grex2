@@ -28,7 +28,7 @@ if __name__ == "__main__":
         config = yaml.load(instream, Loader=yaml.Loader)
 
     scope = config["scope"]
-    conclusion = config["conclusion"]
+    conclusion = config.get("conclusion", None)
     conclusion_meta = config.get("conclusion_meta", None)
 
     templates = FeaturePredicate.from_config(config["templates"])
