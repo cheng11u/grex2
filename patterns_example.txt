@@ -1,4 +1,4 @@
-scope: X-[subj]->Y
+scope: pattern { X-[subj]->Y }
 conclusion: X << Y
 conclusion_meta:
     sent_id: "n01.*"
