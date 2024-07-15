@@ -24,17 +24,17 @@ class Dict:
 
 
 class StringMatcher:
-    def __init__(self, method, patterns):
+    def __init__(self, method, regexps):
         assert method in ["include", "exclude"]
         self.include = (method == "include")
 
-        if type(patterns) != list:
-            patterns = [patterns]
-        assert all(type(p) == str for p in patterns)
-        self.patterns = patterns
+        if type(regexps) != list:
+            regexps = [regexps]
+        assert all(type(p) == str for p in regexps)
+        self.regexps = regexps
 
     def __call__(self, string):
-        m = any(re.fullmatch(p, string) for p in self.patterns)
+        m = any(re.fullmatch(p, string) for p in self.regexps)
         return m if self.include else not m
 
 
@@ -54,7 +54,7 @@ class FeaturePredicate:
                 obj.matchers[node] = dict()
                 for k, v in tpl.items():
                     assert k in ALLOWED_FEATURE_POSITIONS
-                    obj.matchers[node][k] = StringMatcher(v["method"], v["pattern"])
+                    obj.matchers[node][k] = StringMatcher(v["method"], v["regexp"])
 
         return obj
 
