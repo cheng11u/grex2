@@ -132,48 +132,52 @@ def extract_features(draft, match, feature_predicate, include_metadata=False):
     return features
 
 
-def extract_data(treebank_path, scope, conclusion, conclusion_meta, feature_predicate):
+def extract_data(treebank_paths, scope, conclusion, conclusion_meta, feature_predicate):
     if conclusion is None and conclusion_meta is None:
         raise RuntimeError("No conclusion provided in configuration")
 
-    corpus = grewpy.Corpus(treebank_path)
-    draft = grewpy.CorpusDraft(treebank_path)
-
-    req = grewpy.Request(scope)
-    if conclusion is not None:
-        matches = corpus.search(req, clustering_parameter=["{" + conclusion + "}"])
-        matches = [(sent, c) for c, sents in matches.items() for sent in sents]
-    else:
-        matches = [(sent, "Yes") for sent in corpus.search(req)]
-
-    if conclusion_meta is not None:
-        conclusion_meta = {
-            k: v if type(v) is list else [v]
-            for k, v in conclusion_meta.items()
-        }
-
-        matches = [
-            (sent, "No")
-            if c == "No"
-            else (
-                (sent, "Yes")
-                if all(
-                    any(re.fullmatch(p, draft[sent['sent_id']].meta[k]) for p in v)
-                    for k, v in conclusion_meta.items()
-                )
-                else (sent, "No")
-            )
-            for sent, c in matches
-            if all(k in draft[sent['sent_id']].meta for k in conclusion_meta.keys())
-        ]
+    if type(treebank_paths) == str:
+        treebank_paths = [treebank_paths]
 
     data = []
-    for match, c in matches:
-        assert c in ["Yes", "No"]
+    for tp in treebank_paths:
+        corpus = grewpy.Corpus(tp)
+        draft = grewpy.CorpusDraft(tp)
 
-        data.append({
-            "input": extract_features(draft, match, feature_predicate),
-            "output": 1 if c == "Yes" else 0
-        })
+        req = grewpy.Request(scope)
+        if conclusion is not None:
+            matches = corpus.search(req, clustering_parameter=["{" + conclusion + "}"])
+            matches = [(sent, c) for c, sents in matches.items() for sent in sents]
+        else:
+            matches = [(sent, "Yes") for sent in corpus.search(req)]
+
+        if conclusion_meta is not None:
+            conclusion_meta = {
+                k: v if type(v) is list else [v]
+                for k, v in conclusion_meta.items()
+            }
+
+            matches = [
+                (sent, "No")
+                if c == "No"
+                else (
+                    (sent, "Yes")
+                    if all(
+                        any(re.fullmatch(p, draft[sent['sent_id']].meta[k]) for p in v)
+                        for k, v in conclusion_meta.items()
+                    )
+                    else (sent, "No")
+                )
+                for sent, c in matches
+                if all(k in draft[sent['sent_id']].meta for k in conclusion_meta.keys())
+            ]
+
+        for match, c in matches:
+            assert c in ["Yes", "No"]
+
+            data.append({
+                "input": extract_features(draft, match, feature_predicate),
+                "output": 1 if c == "Yes" else 0
+            })
 
     return data
