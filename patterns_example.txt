@@ -6,36 +6,46 @@ conclusion_meta:
 templates:
     base:
         own:
-            method: exclude
-            pattern: "lemma"
+            method: include
+            regexp: ".*"
+            lemma_top_k: -1
         parent:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
         child:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
         prev:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
         next:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
 
 features:
     X: base
     Y: 
         own:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
         parent:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
         child:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
         prev:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
         next:
             method: include
-            pattern: ".*"
+            regexp: ".*"
+            lemma_top_k: -1
