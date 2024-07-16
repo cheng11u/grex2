@@ -135,7 +135,7 @@ if __name__ == "__main__":
                     presicion = (n_pattern_negative_occurence / n_matched) * 100
 
                 ordered_rules.append({
-                    "pattern": ",".join(sorted(name.split(","))),
+                    "pattern": name,
                     "n_pattern_occurence": int(idx_col.sum()),
                     "n_pattern_positive_occurence": int(n_pattern_positive_occurence),
                     "decision": decision,
