@@ -79,9 +79,13 @@ def extract_features(draft, match, feature_predicate, include_metadata=False):
         # node relation
         parent_id, rel = parents[node_id]
         if feature_predicate(node_name, "own", "rel_shallow"):
-            features["node:" + node_name + ":own:rel_shallow"] = ":".join(rel[rel_key] for rel_key in ["1", "2"] if rel_key in rel)
+            k = ("node", node_name, "own", "rel_shallow")
+            v = ":".join(rel[rel_key] for rel_key in ["1", "2"] if rel_key in rel)
+            features[k] = v
         if feature_predicate(node_name, "own", "rel_deep") and "deep" in rel:
-            features["node:" + node_name + ":own:rel_deep"] = rel["deep"]
+            k = ("node", node_name, "own", "rel_deep")
+            v = rel['deep']
+            features[k] = v
 
         # position of parent
         if feature_predicate(node_name, "parent", "position"):
@@ -169,7 +173,7 @@ def extract_data(treebank_paths, scope, conclusion, conclusion_meta, feature_pre
     data = []
     for tp in treebank_paths:
         corpus = grewpy.Corpus(tp)
-        draft = grewpy.CorpusDraft(tp)
+        draft = grewpy.CorpusDraft(corpus)
 
         req = grewpy.Request(scope)
         if conclusion is not None:
