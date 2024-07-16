@@ -5,7 +5,7 @@ from grex.data import extract_data
 from grex.utils import FeaturePredicate
 
 cmd = argparse.ArgumentParser()
-cmd.add_argument("--data", type=str, required=True)
+cmd.add_argument('data', metavar='F', type=str, nargs='+', help='data')
 cmd.add_argument("--patterns", type=str, required=True)
 args = cmd.parse_args()
 

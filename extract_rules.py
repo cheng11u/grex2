@@ -14,7 +14,7 @@ import grex.features
 
 if __name__ == "__main__":
     cmd = argparse.ArgumentParser()
-    cmd.add_argument("--data", type=str, required=True)
+    cmd.add_argument('data', metavar='F', type=str, nargs='+', help='data')
     cmd.add_argument("--output", type=str, required=True)
     cmd.add_argument("--patterns", type=str, required=True)
     cmd.add_argument("--max-degree", type=int, default=1)
