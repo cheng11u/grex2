@@ -163,7 +163,9 @@ def extract_features(draft, match, feature_predicate, include_metadata=False):
     return features
 
 
-def extract_data(treebank_paths, scope, conclusion, conclusion_meta, feature_predicate):
+def extract_data(treebank_paths, scope, conclusion, conclusion_meta, feature_predicate, config="ud"):
+    grewpy.set_config(config)
+
     if conclusion is None and conclusion_meta is None:
         raise RuntimeError("No conclusion provided in configuration")
 

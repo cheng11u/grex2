@@ -46,6 +46,7 @@ if __name__ == "__main__":
     cmd.add_argument('data', metavar='F', type=str, nargs='+', help='data')
     cmd.add_argument("--output", type=str, required=True)
     cmd.add_argument("--patterns", type=str, required=True)
+    cmd.add_argument("--config", type=str, default="ud")
     cmd.add_argument("--grew", action="store_true", help="return a grew request")
     cmd.add_argument("--min-samples_leaf", type=int, default=5)
     cmd.add_argument("--node_impurity", type=float, default=0.15)
@@ -64,7 +65,7 @@ if __name__ == "__main__":
     feature_predicate = FeaturePredicate.from_config(config["features"], templates=templates)
 
     print("Loading dataset...", flush=True)
-    data = extract_data(args.data, scope, conclusion, conclusion_meta, feature_predicate)
+    data = extract_data(args.data, scope, conclusion, conclusion_meta, feature_predicate, config=args.config)
 
     # quick checks
     if len(data) == 0:
