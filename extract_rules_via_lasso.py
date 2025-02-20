@@ -4,7 +4,6 @@ import json
 import numpy as np
 import skglm
 import scipy.stats
-import grewpy
 
 from grex.data import extract_data
 from grex.utils import FeaturePredicate
@@ -26,8 +25,6 @@ if __name__ == "__main__":
     cmd.add_argument("--alpha-num", type=int, default=100)
     args = cmd.parse_args()
 
-    grewpy.set_config (args.config)
-
     with open(args.patterns) as instream:
         config = yaml.load(instream, Loader=yaml.Loader)
 
@@ -39,7 +36,7 @@ if __name__ == "__main__":
     feature_predicate = FeaturePredicate.from_config(config["features"], templates=templates)
 
     print("Loading dataset...", flush=True)
-    data = extract_data(args.data, scope, conclusion, conclusion_meta, feature_predicate)
+    data = extract_data(args.data, scope, conclusion, conclusion_meta, feature_predicate, config=args.config)
 
     # quick checks
     if len(data) == 0:
