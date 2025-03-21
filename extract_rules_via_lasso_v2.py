@@ -152,6 +152,8 @@ if __name__ == "__main__":
                     "n_pattern_occurence": int(idx_col.sum()),
                     "n_pattern_positive_occurence": int(n_pattern_positive_occurence),
                     "coverage": coverage,
+                    "coverage_q": coverage_q,
+                    "coverage_not_q": coverage_notq,
                     "decision": decision,
                     "alpha": alpha,
                     "value": value,
